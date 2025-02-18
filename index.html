@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayjay</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            overflow-y: auto;
+            background-image: url('https://frutiger-aero.org/img/frutiger-eco-2.webp');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-color: #b0e0e6;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            max-width: 90%;
+            margin: 0 auto;
+            position: relative;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        h1 {
+            color: #4682b4;
+            font-size: 2em;
+        }
+        .kayjay-face {
+            font-size: 40px;
+            margin-bottom: 15px;
+            display: inline-block;
+            transition: all 0.3s ease-in-out;
+            animation: float 2s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .speech-bubble {
+            background-color: #87ceeb;
+            color: #000;
+            padding: 12px;
+            border-radius: 15px;
+            position: relative;
+            margin-bottom: 15px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 0.9em;
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid #87ceeb;
+        }
+        .question {
+            margin: 15px 0;
+            font-size: 1.1em;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        .options {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .options button {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.2) 100%);
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.2s ease;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        .options button:hover {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.3) 100%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transform: translateY(-1px);
+        }
+        .result {
+            display: none;
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        .dialogue {
+            display: none;
+            margin-top: 20px;
+            font-size: 1em;
+            color: #2f4f4f;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .heart {
+            position: absolute;
+            top: -40px;
+            font-size: 20px;
+            animation: fall 5s infinite;
+            z-index: 10;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #f1c40f;
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle 1s ease-out forwards;
+            z-index: 11;
+        }
+        @keyframes sparkle {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(2);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                max-width: 95%;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .kayjay-face {
+                font-size: 30px;
+            }
+            .speech-bubble {
+                font-size: 0.8em;
+            }
+            .question {
+                font-size: 1em;
+            }
+            .options {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .options button {
+                width: 100%;
+                padding: 10px;
+            }
+            .result {
+                font-size: 1.1em;
+            }
+            .dialogue {
+                font-size: 0.9em;
+            }
+            .heart {
+                top: -30px;
+                font-size: 16px;
+            }
+            .sparkle {
+                width: 6px;
+                height: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="mainContainer">
+  <h1>Kayjay</h1>
+  <div class="kayjay-face" id="kayjayFace">^_^</div>
+  <div class="speech-bubble" id="introMessage">
+    <p>Olá! Eu sou o Kayjay!<br>
+    Sou uma IA de respostas prontas,criada por um estudante de progração<br>
+    Minha função é testar o sistema de interação entre o usuário e o programa.<br>
+    Para fazer esse teste irei fazer perguntas matemáticas, assim testaremos seus conhecimentos na matéria!</p>
+  </div>
+  <button id="startButton" onclick="startGame()">VAMOS NESSA!</button>
+  <div id="questionsContainer"></div>
+  <p class="result" id="result"></p>
+  <div class="dialogue" id="finalDialogue">
+      <p>Kariny, eu realmente não sei o que tentei fazer aqui, mas vamos lá...<br>
+      Tudo começou quando estava reclamando com uma amiga sobre uma idiotice de adolescente,<br>
+      reclamando sobre meu medo idiota de não ter uma pessoa para estar ao meu lado,<br>
+      para que eu pudesse compartilhar meus sonhos, medos, conquistas e etc, sei lá, acho que você entendeu.<br>
+      É uma real idiotice, kk...<br>
+      Até que ela te chamou, no exato momento meu coração disparou, quando você sentou do meu lado para dizer sobre DungeonMeshi...<br>
+      AÍ QUE MEU CORAÇÃO QUASE SAIU DA BOCA 😩😩<br>
+      Mas no momento em que vi o seu olhar penetrando no fundo da minha alma, o seu sorriso... eu me senti tão bem.<br>
+      Kariny, eu podia ter te dito isso no Instagram, não tinha necessidade de criar um site para isso, kkkk (AI COMO ESSE PROJETO ME DEU DOR DE CABEÇA 😭😭🙌🙌💀💀)<br>
+      Mas você merece o melhor, e isso é tudo que eu posso te dar.<br>
+      Só quero que você saiba que eu te amo, eu te amo muito, MUITO MESMO DO TAMANHO DE UM DINOSSAURO EM CIMA DE UMA BALEIA CÓSMICA! VIAJANTE DO MULTIVERSO!!!<br>
+      Olha, se você não sentir o mesmo por mim, não tem nenhum problema, eu só queria te dizer o quanto você me faz sentir especial.<br>
+      Você é tão linda, tão diferente de tudo que eu já vi, quando eu vi vc rodando o cabelo na peça do 8° KKKKK<br>
+      Eu me imprecionei tanto em ver que vc faz oq precisa fazer e sem ligar pelas opinões, opiniãos ai sla🙏😭 Vc é incrivel :p<br>
+      Basicamente não sei o que dizer... estou com sono kkkk, agora são basicamente 08:19 da manhã 😩, mas eu só quero que vc saiba de uma coisa<br>
+      Kariny, eu te amo :)
+      </p>
+  </div>
+</div>
+<script>
+    let currentQuestion = 0;
+    const kayjayFace = document.getElementById("kayjayFace");
+    const questions = [
+        { question: "Quanto é 2 + 2?", answers: [4, 3, 5], correct: 4 },
+        { question: "Quanto é 5 x 3?", answers: [15, 10, 20], correct: 15 },
+        { question: "Quanto é 10 ÷ 2?", answers: [5, 2, 10], correct: 5 },
+        { question: "Quanto é 7 + 8?", answers: [15, 14, 16], correct: 15 },
+        { question: "Quanto é 9 x 6?", answers: [54, 64, 45], correct: 54 },
+        { question: "Quantos % o João deve te amar??", answers: ["0 :(", "100 :)", "∞ >:))"], correct: "∞ >:))" }
+    ];
+    function startGame() {
+        document.getElementById('startButton').style.display = 'none';
+        document.getElementById('introMessage').style.display = 'none';
+        loadQuestion();
+    }
+    function loadQuestion() {
+        const container = document.getElementById("questionsContainer");
+        container.innerHTML = "";
+        if (currentQuestion >= questions.length) {
+            showFinalDialogue();
+            return;
+        }
+        const questionData = questions[currentQuestion];
+        const questionElement = document.createElement("div");
+        questionElement.className = "question";
+        questionElement.innerHTML = `<p>${currentQuestion + 1}. ${questionData.question}</p>`;
+        const optionsContainer = document.createElement("div");
+        optionsContainer.className = "options";
+        const shuffledAnswers = shuffleArray(questionData.answers);
+        shuffledAnswers.forEach(answer => {
+            const button = document.createElement("button");
+            button.textContent = answer;
+            button.className = "answer-button";
+            button.onclick = () => checkAnswer(answer, questionData.correct);
+            optionsContainer.appendChild(button);
+        });
+        questionElement.appendChild(optionsContainer);
+        container.appendChild(questionElement);
+        if (currentQuestion === questions.length - 1) {
+            kayjayFace.textContent = "❤️‿❤️";
+            startHeartsFall();
+        }
+    }
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+    function checkAnswer(selected, correct) {
+        const result = document.getElementById("result");
+        if (selected === correct) {
+            kayjayFace.textContent = "★‿★";
+            result.textContent = "Correto!";
+            result.style.color = "#2ecc71";
+            result.style.display = "block";
+            for (let i = 0; i < 10; i++) {
+                createSparkle(event);
+            }
+            setTimeout(() => {
+                kayjayFace.textContent = "^_^";
+                result.style.display = "none";
+                currentQuestion++;
+                loadQuestion();
+            }, 1000);
+        } else {
+            kayjayFace.textContent = "O_O?!💧";
+            result.textContent = "Incorreto. Tente novamente!";
+            result.style.color = "#e74c3c";
+            result.style.display = "block";
+            setTimeout(() => {
+                kayjayFace.textContent = "^_^";
+                result.style.display = "none";
+            }, 1000);
+        }
+    }
+    function showFinalDialogue() {
+        const finalDialogue = document.getElementById("finalDialogue");
+        finalDialogue.style.display = "block";
+    }
+    function startHeartsFall() {
+        setInterval(createFallingHeart, 200);
+    }
+    function createFallingHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "❤️";
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.animationDuration = `${Math.random() * 2 + 3}s`;
+        document.body.appendChild(heart);
+        setTimeout(() => {
+            heart.remove();
+        }, 5000);
+    }
+    function createSparkle(event) {
+        const sparkle = document.createElement("div");
+        sparkle.className = "sparkle";
+        sparkle.style.left = `${event.clientX - 5}px`;
+        sparkle.style.top = `${event.clientY - 5}px`;
+        document.body.appendChild(sparkle);
+        setTimeout(() => {
+            sparkle.remove();
+        }, 1000);
+    }
+</script>
+</body>
+</html>
